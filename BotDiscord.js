@@ -6,6 +6,8 @@ const ytdl = require('ytdl-core');
 const cheerio = require('cheerio');
 const request = require('request');
 const  opusscript = require("opusscript");
+const { measureMemory } = require('vm');
+const Token = require('./claveDiscord')
 
 let servers = {};
 
@@ -112,27 +114,27 @@ client.on('message',function(message){
         if(!message.member.voice.connection) message.member.voice.channel.join('766250023108739082').then(function(connection){
           console.log("conectado al canal")
           play(connection, message);
+          message.reply("Desarrollalo papi ")
         })
 
     break;
 
-    case 'skip':
-        //let server = servers[message.guild.id];
-        if(server.dispatcher) server.dispatcher.end();
-        message.channel.send("Saltando a la siguiente cancion!")
-    break;
+    
 
     case 'stop':
-        //let server = servers[message.guild.id];
+      (async function(){
+        let server = await  servers[message.guild.id];
         if(message.guild.voice.connection){
           for(let i = server.queue.length -1; i >=0; i--){
             server.queue.splice(i,1);
         }
+      
 
         server.dispatcher.end();
-        message.channel.send("termino la cancion desconectando del canal de voz")
+        message.channel.send("Se termino la Cancion")
         console.log('se detiene la cola')
       }
+      })();
 
       if(message.guild.connection) message.guild.voice.connection.disconnect();
     break;
@@ -145,4 +147,4 @@ client.on('message',function(message){
 
   
  
-client.login('NzI3NTQ5NDIyMjc1MjY0NTEy.XvtdMw.7yUbjSgLnkANNjT19Y3OAKYz7ko');
+client.login('NzI3NTQ5NDIyMjc1MjY0NTEy.XvtdMw.2_wCcN18jWync3oX58bkZNoqeiU');
